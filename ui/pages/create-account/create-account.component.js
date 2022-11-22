@@ -5,10 +5,12 @@ import {
   NEW_ACCOUNT_ROUTE,
   IMPORT_ACCOUNT_ROUTE,
   CONNECT_HARDWARE_ROUTE,
+  CONNECT_REMOTE_ROUTE
 } from '../../helpers/constants/routes';
 import NewAccountCreateForm from './new-account.container';
 import NewAccountImportForm from './import-account';
 import ConnectHardwareForm from './connect-hardware';
+import ConnectRemoteForm from './connect-remote';
 
 export default class CreateAccountPage extends Component {
   render() {
@@ -30,6 +32,11 @@ export default class CreateAccountPage extends Component {
               exact
               path={CONNECT_HARDWARE_ROUTE}
               component={ConnectHardwareForm}
+            />
+            <Route
+              exact
+              path={CONNECT_REMOTE_ROUTE}
+              component={ConnectRemoteForm}
             />
           </Switch>
         </div>

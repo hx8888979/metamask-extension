@@ -632,6 +632,9 @@
   "connectHardwareWallet": {
     "message": "Connect hardware wallet"
   },
+  "connectRemoteKeyring": {
+    "message": "Connect remote keyring"
+  },
   "connectManually": {
     "message": "Manually connect to current site"
   },

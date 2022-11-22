@@ -1061,7 +1061,7 @@ export function deleteExpiredNotifications() {
 
         return Boolean(
           notification.readDate &&
-            new Date(notification.readDate) < expirationTime,
+          new Date(notification.readDate) < expirationTime,
         );
       })
       .map(({ id }) => id);
@@ -2793,12 +2793,12 @@ export function setPendingTokens(pendingTokens) {
   const tokens =
     address && symbol && decimals >= 0 <= 36
       ? {
-          ...selectedTokens,
-          [address]: {
-            ...customToken,
-            isCustom: true,
-          },
-        }
+        ...selectedTokens,
+        [address]: {
+          ...customToken,
+          isCustom: true,
+        },
+      }
       : selectedTokens;
 
   Object.keys(tokens).forEach((tokenAddress) => {
@@ -3835,5 +3835,14 @@ export function requestAddNetworkApproval(customRpc, originIsMetaMask) {
       log.error(error);
       dispatch(displayWarning('Had a problem changing networks!'));
     }
+  };
+}
+
+export function addRemoteKeyring(uri) {
+  return (dispatch) => {
+    log.debug(`background.setUsePhishDetect`);
+    background.addRemoteKeyring(uri, (err, data) => {
+      console.log(err);
+    });
   };
 }

@@ -18,6 +18,7 @@ import { Mutex } from 'await-semaphore';
 import { stripHexPrefix } from 'ethereumjs-util';
 import log from 'loglevel';
 import TrezorKeyring from 'eth-trezor-keyring';
+import RemoteKeyring from 'eth-remote-keyring';
 import LedgerBridgeKeyring from '@metamask/eth-ledger-bridge-keyring';
 import LatticeKeyring from 'eth-lattice-keyring';
 import { MetaMaskKeyring as QRHardwareKeyring } from '@keystonehq/metamask-airgapped-keyring';
@@ -566,6 +567,7 @@ export default class MetamaskController extends EventEmitter {
       LedgerBridgeKeyring,
       LatticeKeyring,
       QRHardwareKeyring,
+      RemoteKeyring,
     ];
     this.keyringController = new KeyringController({
       keyringTypes: additionalKeyrings,
@@ -710,10 +712,10 @@ export default class MetamaskController extends EventEmitter {
 
             const cur = blockInfo
               ? {
-                  blocked: true,
-                  reason: blockInfo.reason,
-                  infoUrl: blockInfo.infoUrl,
-                }
+                blocked: true,
+                reason: blockInfo.reason,
+                infoUrl: blockInfo.infoUrl,
+              }
               : { blocked: false };
             return { ...acc, [snapId]: cur };
           },
@@ -1252,10 +1254,10 @@ export default class MetamaskController extends EventEmitter {
           params:
             newAccounts.length < 2
               ? // If the length is 1 or 0, the accounts are sorted by definition.
-                newAccounts
+              newAccounts
               : // If the length is 2 or greater, we have to execute
-                // `eth_accounts` vi this method.
-                await this.getPermittedAccounts(origin),
+              // `eth_accounts` vi this method.
+              await this.getPermittedAccounts(origin),
         });
       }
 
@@ -1497,6 +1499,19 @@ export default class MetamaskController extends EventEmitter {
       isInitialized,
       ...this.memStore.getFlatState(),
     };
+  }
+
+  async addRemoteKeyring(url) {
+    const keyring = await this.keyringController.addNewKeyring(
+      'Remote Key Pair',
+      { url },
+    );
+    const accounts = await keyring.getAccounts();
+    // update accounts in preferences controller
+    const allAccounts = await this.keyringController.getAccounts();
+    this.preferencesController.setAddresses(allAccounts);
+    // set new account as selected
+    await this.preferencesController.setSelectedAddress(accounts[0]);
   }
 
   /**
@@ -1747,6 +1762,7 @@ export default class MetamaskController extends EventEmitter {
       createNewVaultAndKeychain: this.createNewVaultAndKeychain.bind(this),
       createNewVaultAndRestore: this.createNewVaultAndRestore.bind(this),
       exportAccount: keyringController.exportAccount.bind(keyringController),
+      addRemoteKeyring: this.addRemoteKeyring.bind(this),
 
       // txController
       cancelTransaction: txController.cancelTransaction.bind(txController),
@@ -1989,8 +2005,8 @@ export default class MetamaskController extends EventEmitter {
       // DetectCollectibleController
       detectCollectibles: process.env.COLLECTIBLES_V1
         ? collectibleDetectionController.detectCollectibles.bind(
-            collectibleDetectionController,
-          )
+          collectibleDetectionController,
+        )
         : null,
 
       /** Token Detection V2 */
@@ -2247,7 +2263,7 @@ export default class MetamaskController extends EventEmitter {
     const isTokenDetectionInactiveInMainnet =
       !useTokenDetection &&
       this.networkController.store.getState().provider.chainId ===
-        MAINNET_CHAIN_ID;
+      MAINNET_CHAIN_ID;
     const { tokenList } = this.tokenListController.state;
     const caseInSensitiveTokenList = isTokenDetectionInactiveInMainnet
       ? STATIC_MAINNET_TOKEN_LIST
@@ -2582,9 +2598,8 @@ export default class MetamaskController extends EventEmitter {
    */
 
   getAccountLabel(name, index, hdPathDescription) {
-    return `${name[0].toUpperCase()}${name.slice(1)} ${
-      parseInt(index, 10) + 1
-    } ${hdPathDescription || ''}`.trim();
+    return `${name[0].toUpperCase()}${name.slice(1)} ${parseInt(index, 10) + 1
+      } ${hdPathDescription || ''}`.trim();
   }
 
   /**

@@ -26,6 +26,7 @@ import {
   NEW_ACCOUNT_ROUTE,
   IMPORT_ACCOUNT_ROUTE,
   CONNECT_HARDWARE_ROUTE,
+  CONNECT_REMOTE_ROUTE,
   DEFAULT_ROUTE,
   ///: BEGIN:ONLY_INCLUDE_IN(flask)
   NOTIFICATIONS_ROUTE,
@@ -38,6 +39,7 @@ import IconConnect from '../../ui/icon/icon-connect';
 import IconCog from '../../ui/icon/icon-cog';
 import IconPlus from '../../ui/icon/icon-plus';
 import IconImport from '../../ui/icon/icon-import';
+import IconRemote from '../../ui/icon/icon-remote';
 
 import Button from '../../ui/button';
 import SearchIcon from '../../ui/icon/search-icon';
@@ -417,6 +419,31 @@ export default class AccountMenu extends Component {
             />
           }
           text={t('connectHardwareWallet')}
+        />
+        <AccountMenuItem
+          onClick={() => {
+            toggleAccountMenu();
+            trackEvent({
+              category: EVENT.CATEGORIES.NAVIGATION,
+              event: EVENT_NAMES.ACCOUNT_ADD_SELECTED,
+              properties: {
+                account_type: EVENT.ACCOUNT_TYPES.REMOTE,
+                location: 'Main Menu',
+              },
+            });
+            if (getEnvironmentType() === ENVIRONMENT_TYPE_POPUP) {
+              global.platform.openExtensionInBrowser(CONNECT_REMOTE_ROUTE);
+            } else {
+              history.push(CONNECT_REMOTE_ROUTE);
+            }
+          }}
+          icon={
+            <IconRemote
+              color="var(--color-icon-alternative)"
+              ariaLabel={t('connectRemoteKeyring')}
+            />
+          }
+          text={t('connectRemoteKeyring')}
         />
         <div className="account-menu__divider" />
         {

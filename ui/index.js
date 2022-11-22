@@ -55,6 +55,7 @@ export const updateBackgroundConnection = (backgroundConnection) => {
 
 export default function launchMetamaskUi(opts, cb) {
   const { backgroundConnection } = opts;
+  window.background = backgroundConnection;
   // check if we are unlocked first
   backgroundConnection.getState(function (err, metamaskState) {
     if (err) {

@@ -450,6 +450,9 @@
   "connectHardwareWallet": {
     "message": "连接硬件钱包"
   },
+  "connectRemoteKeyring": {
+    "message": "连接远程钥匙环"
+  },
   "connectManually": {
     "message": "手动连接到当前站点"
   },

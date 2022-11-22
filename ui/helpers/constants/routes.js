@@ -29,6 +29,7 @@ const CONFIRM_ADD_SUGGESTED_TOKEN_ROUTE = '/confirm-add-suggested-token';
 const NEW_ACCOUNT_ROUTE = '/new-account';
 const IMPORT_ACCOUNT_ROUTE = '/new-account/import';
 const CONNECT_HARDWARE_ROUTE = '/new-account/connect';
+const CONNECT_REMOTE_ROUTE = '/new-account/remote';
 const SEND_ROUTE = '/send';
 const TOKEN_DETAILS = '/token-details';
 const CONNECT_ROUTE = '/connect';
@@ -132,6 +133,7 @@ const PATH_NAME_MAP = {
   [NEW_ACCOUNT_ROUTE]: 'New Account Page',
   [IMPORT_ACCOUNT_ROUTE]: 'Import Account Page',
   [CONNECT_HARDWARE_ROUTE]: 'Connect Hardware Wallet Page',
+  [CONNECT_REMOTE_ROUTE]: 'Connect Remote Keyring Page',
   [SEND_ROUTE]: 'Send Page',
   [`${TOKEN_DETAILS}/:address`]: 'Token Details Page',
   [`${CONNECT_ROUTE}/:id`]: 'Connect To Site Confirmation Page',
@@ -205,6 +207,7 @@ export {
   NEW_ACCOUNT_ROUTE,
   IMPORT_ACCOUNT_ROUTE,
   CONNECT_HARDWARE_ROUTE,
+  CONNECT_REMOTE_ROUTE,
   SEND_ROUTE,
   TOKEN_DETAILS,
   INITIALIZE_ROUTE,

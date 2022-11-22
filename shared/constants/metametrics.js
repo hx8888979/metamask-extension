@@ -338,6 +338,7 @@ export const EVENT = {
     DEFAULT: 'metamask',
     IMPORTED: 'imported',
     HARDWARE: 'hardware',
+    REMOTE: 'remote',
   },
   ACCOUNT_IMPORT_TYPES: {
     JSON: 'json',
